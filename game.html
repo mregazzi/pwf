@@ -1,0 +1,33 @@
+<html>
+Some text here
+<canvas id="gameCanvas" width="800"
+height="600"></canvas>
+
+<script>
+var canvas;
+var canvasContext;
+var ballX = 50;
+var increment = 1;
+
+window.onload = function() {
+	canvas = document.getElementById('gameCanvas');
+	canvasContext = canvas.getContext('2d');
+	setInterval(drawEverything, 5);
+}
+
+function drawEverything(){
+	if (((ballX + 50) >= canvas.width) || ballX <= 0 ){
+		increment = -increment
+	}
+	ballX = ballX + increment;
+	console.log(ballX);
+	canvasContext.fillStyle = 'black';
+	canvasContext.fillRect(0,0,canvas.width,canvas.height);
+	canvasContext.fillStyle = 'white';
+	canvasContext.fillRect(225,210,200,200);
+	canvasContext.fillStyle = 'red';
+	canvasContext.fillRect(ballX,200,50,25);
+}
+
+</script>
+</html>
