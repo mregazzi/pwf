@@ -1,5 +1,4 @@
 <html>
-Some text here
 <canvas id="gameCanvas" width="800"
 height="600"></canvas>
 
@@ -7,27 +6,52 @@ height="600"></canvas>
 var canvas;
 var canvasContext;
 var ballX = 50;
-var increment = 10;
+var ballSpeedX = 5;
+var ballY = 50;
+var ballSpeedY = 2;
+var ballHeigth= 10;
+var ballWidth = 10;
 
+var paddleOneY = 250;
+const PADDLE_HEIGHT = 100;
+	
 window.onload = function() {
 	canvas = document.getElementById('gameCanvas');
 	canvasContext = canvas.getContext('2d');
-	setInterval(drawEverything, 5);
+	var framesPerSecond = 15;
+	setInterval(function() {
+		moveEverything();
+		drawEverything();	
+	}, 1000 / framesPerSecond);
+}
+
+function moveEverything() {
+	if (((ballX + ballWidth) > canvas.width) || (ballX - ballWidth) < 0 ){
+		ballSpeedX = -ballSpeedX;
+	}
+	if (((ballY + ballWidth) > canvas.height) || (ballY  - ballWidth) < 0 ){
+		ballSpeedY = -ballSpeedY;
+	}
+	ballX = ballX + ballSpeedX;
+	ballY = ballY + ballSpeedY;
 }
 
 function drawEverything(){
-	if (((ballX + 50) >= canvas.width) || ballX <= 0 ){
-		increment = -increment
-	}
-	ballX = ballX + increment;
-	console.log(ballX);
-	canvasContext.fillStyle = 'black';
-	canvasContext.fillRect(0,0,canvas.width,canvas.height);
-	canvasContext.fillStyle = 'white';
-	canvasContext.fillRect(225,210,200,200);
-	canvasContext.fillStyle = 'red';
-	canvasContext.fillRect(ballX,200,50,25);
+	colorRect(0,0,canvas.width,canvas.height, 'black')
+	colorRect(0, paddleOneY, 10, PADDLE_HEIGHT, 'white')
+	colorCircle(ballX, ballY, 10,'white');
 }
 
+function colorCircle(centerX, centerY, radius, drawColor){
+	canvasContext.fillStyle = drawColor;
+	canvasContext.beginPath();
+	canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+	canvasContext.fill();
+}
+
+function colorRect(leftX, topY, width, height, drawColor){
+	canvasContext.fillStyle = drawColor;
+	canvasContext.fillRect(leftX, topY, width, height);
+}
 </script>
 </html>
