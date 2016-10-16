@@ -6,14 +6,16 @@ height="600"></canvas>
 var canvas;
 var canvasContext;
 var ballX = 50;
-var ballSpeedX = 5;
+var ballSpeedX = 10;
 var ballY = 50;
-var ballSpeedY = 2;
+var ballSpeedY = 4;
 var ballHeigth= 10;
-var ballWidth = 10;
+const BALL_WIDTH = 10;
 
 var paddleOneY = 250;
+var paddleTwoY = 250;
 const PADDLE_HEIGHT = 100;
+const PADDLE_THICKNESS = 10;
 
 function calculateMousePos(evt){
 	var rect = canvas.getBoundingClientRect();
@@ -42,21 +44,50 @@ window.onload = function() {
 			});
 }
 
+function ballReset() {
+	ballX= canvas.width/2;
+	ballY= canvas.height/2;
+	ballSpeedX = -ballSpeedX;
+}
+
 function moveEverything() {
-	if (((ballX + ballWidth) > canvas.width) || (ballX - ballWidth) < 0 ){
-		ballSpeedX = -ballSpeedX;
+	if(ballX < 0){
+		if(ballY > paddleOneY && 
+				   ballY < paddleOneY + PADDLE_HEIGHT) {
+			ballSpeedX = -ballSpeedX;
+		}else {
+			ballReset();
+		}
 	}
-	if (((ballY + ballWidth) > canvas.height) || (ballY  - ballWidth) < 0 ){
+	
+	if(ballX > canvas.width){
+		if(ballY > paddleTwoY && 
+				   ballY < paddleTwoY + PADDLE_HEIGHT) {
+			ballSpeedX = -ballSpeedX;
+		}else {
+			ballReset();
+		}
+	}
+	
+
+		
+	if (((ballY + BALL_WIDTH) > canvas.height) || (ballY  - BALL_WIDTH) < 0 ){
 		ballSpeedY = -ballSpeedY;
 	}
+	
 	ballX = ballX + ballSpeedX;
 	ballY = ballY + ballSpeedY;
 }
 
 function drawEverything(){
+	//The blank screen
 	colorRect(0,0,canvas.width,canvas.height, 'black')
-	colorRect(0, paddleOneY, 10, PADDLE_HEIGHT, 'white')
-	colorCircle(ballX, ballY, 10,'white');
+	//Left paddle
+	colorRect(0, paddleOneY, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white')
+	//Right paddle
+	colorRect(canvas.width - PADDLE_THICKNESS, paddleTwoY, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white')
+	//The ball
+	colorCircle(ballX, ballY, BALL_WIDTH,'white');
 }
 
 function colorCircle(centerX, centerY, radius, drawColor){
