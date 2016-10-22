@@ -6,7 +6,7 @@ height="540"></canvas>
 var canvas;
 var canvasContext;
 var ballX = 50;
-var ballSpeedX = 20;
+var ballSpeedX = 10;
 var ballY = 50;
 var ballSpeedY = 4;
 var ballHeigth= 10;
@@ -45,7 +45,7 @@ function handleMouseClick(evt) {
 window.onload = function() {
 	canvas = document.getElementById('gameCanvas');
 	canvasContext = canvas.getContext('2d');
-	var framesPerSecond = 15;
+	var framesPerSecond = 30;
 	setInterval(function() {
 		moveEverything();
 		drawEverything();	
@@ -92,25 +92,25 @@ function moveEverything() {
 	
 	computerMovement();
 	
-	if(ballX < 0){
+	if(ballX - BALL_WIDTH - PADDLE_THICKNESS < 0){
 		if(ballY > paddleOneY && 
 				   ballY < paddleOneY + PADDLE_HEIGHT) {
 			ballSpeedX = -ballSpeedX;
 			var deltaY = ballY - (paddleOneY + PADDLE_HEIGHT / 2);
 			ballSpeedY = deltaY * 0.35;
-		}else {
+		}else if(ballX - BALL_WIDTH < 0) {
 			playerTwoScore++; //MUST BE BEFORE ballReset()
 			ballReset();
 		}
 	}
 	
-	if(ballX > canvas.width){
+	if(ballX + BALL_WIDTH + PADDLE_THICKNESS > canvas.width){
 		if(ballY > paddleTwoY && 
 				   ballY < paddleTwoY + PADDLE_HEIGHT) {
 			ballSpeedX = -ballSpeedX;
 			var deltaY = ballY - (paddleTwoY + PADDLE_HEIGHT / 2);
 			ballSpeedY = deltaY * 0.35;
-		}else {
+		}else if (ballX + BALL_WIDTH > canvas.width){
 			playerOneScore++;  //MUST BE BEFORE ballReset()
 			ballReset();
 		}
