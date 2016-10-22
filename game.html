@@ -56,7 +56,14 @@ window.onload = function() {
 	canvas.addEventListener('mousemove',
 			function(evt) {
 				var mousePos = calculateMousePos(evt);
-				paddleOneY = mousePos.y -(PADDLE_HEIGHT /2);
+				if(mousePos.y < (PADDLE_HEIGHT / 2)){
+					paddleOneY = 0;
+				} else if(mousePos.y > (canvas.height - PADDLE_HEIGHT / 2)){
+					console.log (paddleOneY);
+					paddleOneY = canvas.height - PADDLE_HEIGHT;
+				} else {
+					paddleOneY = mousePos.y -(PADDLE_HEIGHT /2);	
+				}
 			});
 }
 
@@ -83,7 +90,9 @@ function moveEverything() {
 	if(showingWinScreen) {
 		return;
 	}
+	
 	computerMovement();
+	
 	if(ballX < 0){
 		if(ballY > paddleOneY && 
 				   ballY < paddleOneY + PADDLE_HEIGHT) {
