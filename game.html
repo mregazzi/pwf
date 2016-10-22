@@ -6,7 +6,7 @@ height="540"></canvas>
 var canvas;
 var canvasContext;
 var ballX = 50;
-var ballSpeedX = 10;
+var ballSpeedX = 20;
 var ballY = 50;
 var ballSpeedY = 4;
 var ballHeigth= 10;
@@ -116,10 +116,16 @@ function moveEverything() {
 	ballY += ballSpeedY;
 }
 
+function drawnet() {
+	for(var i = 0; i < canvas.height; i += 40) {
+		colorRect(canvas.width/2-1,i,2,20,'white');
+	}
+}
+
 function drawEverything(){
 	//The blank screen
 	colorRect(0,0,canvas.width,canvas.height, 'black')
-	
+
 	if (showingWinScreen) {
 		canvasContext.fillStyle = 'white';
 		if(playerOneScore >= WINNING_SCORE) {
@@ -130,6 +136,9 @@ function drawEverything(){
 		canvasContext.fillText("Click to continue", 350, 500);
 		return;
 	}
+	
+	drawnet();
+	
 	//Left paddle
 	colorRect(0, paddleOneY, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white')
 	//Right paddle
