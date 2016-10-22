@@ -33,7 +33,15 @@ function calculateMousePos(evt){
 		y:mouseY
 	};
 }
-	
+
+function handleMouseClick(evt) {
+	if(showingWinScreen){
+		playerOneScore = 0;
+		playerTwoScore = 0;
+		showingWinScreen = false;
+	}
+}
+
 window.onload = function() {
 	canvas = document.getElementById('gameCanvas');
 	canvasContext = canvas.getContext('2d');
@@ -42,6 +50,8 @@ window.onload = function() {
 		moveEverything();
 		drawEverything();	
 	}, 1000 / framesPerSecond);
+	
+	canvas.addEventListener('mousedown', handleMouseClick);
 	
 	canvas.addEventListener('mousemove',
 			function(evt) {
@@ -53,8 +63,6 @@ window.onload = function() {
 function ballReset() {
 	if (playerOneScore >= WINNING_SCORE ||
 		playerTwoScore >= WINNING_SCORE) {
-			playerOneScore = 0;
-			playerTwoScore = 0;
 			showingWinScreen = true;
 	}
 	ballX= canvas.width/2;
@@ -114,7 +122,12 @@ function drawEverything(){
 	
 	if (showingWinScreen) {
 		canvasContext.fillStyle = 'white';
-		canvasContext.fillText("Click to continue", 100, 100);
+		if(playerOneScore >= WINNING_SCORE) {
+			canvasContext.fillText("Left player won!", 350, 200);
+		} else {
+			canvasContext.fillText("Right player won!", 350, 200);
+		}
+		canvasContext.fillText("Click to continue", 350, 500);
 		return;
 	}
 	//Left paddle
