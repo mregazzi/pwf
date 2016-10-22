@@ -59,7 +59,6 @@ window.onload = function() {
 				if(mousePos.y < (PADDLE_HEIGHT / 2)){
 					paddleOneY = 0;
 				} else if(mousePos.y > (canvas.height - PADDLE_HEIGHT / 2)){
-					console.log (paddleOneY);
 					paddleOneY = canvas.height - PADDLE_HEIGHT;
 				} else {
 					paddleOneY = mousePos.y -(PADDLE_HEIGHT /2);	
