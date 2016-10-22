@@ -1,6 +1,6 @@
 <html>
-<canvas id="gameCanvas" width="800"
-height="600"></canvas>
+<canvas id="gameCanvas" width="768"
+height="540"></canvas>
 
 <script>
 var canvas;
@@ -19,6 +19,9 @@ const PADDLE_THICKNESS = 10;
 
 var playerOneScore = 0;
 var playerTwoScore = 0;
+const WINNING_SCORE = 3;
+
+var showingWinScreen = false;
 
 function calculateMousePos(evt){
 	var rect = canvas.getBoundingClientRect();
@@ -48,6 +51,12 @@ window.onload = function() {
 }
 
 function ballReset() {
+	if (playerOneScore >= WINNING_SCORE ||
+		playerTwoScore >= WINNING_SCORE) {
+			playerOneScore = 0;
+			playerTwoScore = 0;
+			showingWinScreen = true;
+	}
 	ballX= canvas.width/2;
 	ballY= canvas.height/2;
 	ballSpeedX = -ballSpeedX;
@@ -63,14 +72,19 @@ function computerMovement(){
 }
 
 function moveEverything() {
+	if(showingWinScreen) {
+		return;
+	}
 	computerMovement();
 	if(ballX < 0){
 		if(ballY > paddleOneY && 
 				   ballY < paddleOneY + PADDLE_HEIGHT) {
 			ballSpeedX = -ballSpeedX;
+			var deltaY = ballY - (paddleOneY + PADDLE_HEIGHT / 2);
+			ballSpeedY = deltaY * 0.35;
 		}else {
+			playerTwoScore++; //MUST BE BEFORE ballReset()
 			ballReset();
-			playerTwoScore++;
 		}
 	}
 	
@@ -78,13 +92,13 @@ function moveEverything() {
 		if(ballY > paddleTwoY && 
 				   ballY < paddleTwoY + PADDLE_HEIGHT) {
 			ballSpeedX = -ballSpeedX;
+			var deltaY = ballY - (paddleTwoY + PADDLE_HEIGHT / 2);
+			ballSpeedY = deltaY * 0.35;
 		}else {
+			playerOneScore++;  //MUST BE BEFORE ballReset()
 			ballReset();
-			playerOneScore++;
 		}
 	}
-	
-
 		
 	if (((ballY + BALL_WIDTH) > canvas.height) || (ballY  - BALL_WIDTH) < 0 ){
 		ballSpeedY = -ballSpeedY;
@@ -97,6 +111,12 @@ function moveEverything() {
 function drawEverything(){
 	//The blank screen
 	colorRect(0,0,canvas.width,canvas.height, 'black')
+	
+	if (showingWinScreen) {
+		canvasContext.fillStyle = 'white';
+		canvasContext.fillText("Click to continue", 100, 100);
+		return;
+	}
 	//Left paddle
 	colorRect(0, paddleOneY, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white')
 	//Right paddle
